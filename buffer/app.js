@@ -6,6 +6,8 @@ console.log(memoryContainer) //In Buffer, Hex are stored
 
 memoryContainer[0] = 0xFF;
 memoryContainer.writeInt8(-34, 1)
+//Convert 34 to binary to 2s complment -> store the binary
+
 memoryContainer[2] = 0x34;
 memoryContainer[3] = 0xE2;
 

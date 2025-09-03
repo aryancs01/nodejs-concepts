@@ -3,6 +3,7 @@ const { Buffer } = require("buffer")
 //takes some time to fill
 // const buffer = Buffer.alloc(10,0 )
 
+// allocUnsafe
 // could have some existing data and sensitive data
 // doest not make existing buffer elements zero
 // Security Issue
@@ -17,7 +18,7 @@ for(let i=0;i<unsafeBuffer.length;i++){
 
 
 //Another reason why allocunsafe is fast
-//Node allocate a piece of memory, 8KiB
+//Node allocate a piece of memory, 8KiB (RAM)
 // console.log(Buffer.poolSize)
 // Use this piece to allocate buffer, because it is fastest
 // **and only allocUnsafe can only use it (along with from & concat), It should match the size
