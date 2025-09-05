@@ -5,6 +5,10 @@ const fs = require("fs/promises");
 
 (async () => {
   const CREATE_FILE = "create a file";
+  const DELETE_FILE = "delete the file";
+  const RENAME_FILE = "rename the file";
+  const ADD_TO_FILE = "add to the file";
+
   async function createFile(path) {
     let existingFileHandle;
     try {
@@ -18,6 +22,36 @@ const fs = require("fs/promises");
       const newFileHandle = await fs.open(path, "w");
       console.log("A new file was successfully created");
       newFileHandle.close();
+    }
+  }
+
+  async function deleteFile(path) {
+    console.log(`Deleting a  file ${path}`)
+    try {
+      await fs.unlink(path);
+      
+      return console.log(`The file ${path} is deleted`);
+    } catch (error) {
+      return console.log(`error: ${error}`);
+    }
+  }
+
+  async function renameFile(oldPath,newPath) {
+    try {
+      await fs.rename(oldPath,newPath)
+      return console.log(`file is renamed from ${oldPath} to ${newPath}`)
+    } catch (error) {
+      return console.log(`error: ${error}`);
+    }
+  }
+
+  async function addToFile(path, content) {
+    console.log(`Adding to the ${path}`)
+    try {
+      await fs.writeFile(path,content)
+      return console.log(`content: ${content} is written at path:${path}`)
+    } catch (error) {
+      return console.log(`error: ${error}`);
     }
   }
 
@@ -46,6 +80,33 @@ const fs = require("fs/promises");
     if (command.includes(CREATE_FILE)) {
       const filePath = command.substring(CREATE_FILE.length + 1);
       createFile(filePath);
+    }
+
+    // delete a file
+    // delete the file <path>
+    if(command.includes(DELETE_FILE)){
+      const filePath = command.substring(DELETE_FILE.length + 1);
+      deleteFile(filePath);
+    }
+
+    // rename file:
+    // `rename the file <path> to <new-path>`
+    if(command.includes(RENAME_FILE)){
+      const _idx = command.indexOf(" to ")
+      const oldFilePath = command.substring(RENAME_FILE.length + 1,_idx)
+      const newFilePath = command.substring(_idx + 4);
+
+      renameFile(oldFilePath, newFilePath)
+    }
+
+    // add to file 
+    // add to the file <path> this content: <content>  
+    if(command.includes(ADD_TO_FILE)){
+      const _idx = command.indexOf(" this content: ");
+      const filePath = command.substring(ADD_TO_FILE.length + 1,_idx);
+      const content = command.substring(_idx + 15)
+
+      addToFile(filePath,content)
     }
   });
 
