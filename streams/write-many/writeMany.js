@@ -92,14 +92,15 @@ const fs = require("node:fs/promises");
   const stream = fileHandle.createWriteStream();
 
   let i = 0;
+  let maxLength = 1000000;
 
   const writeMany = () => {
-    while (i < 1000000) {
+    while (i < maxLength) {
       const buff = Buffer.from(` ${i} `, "utf-8");
 
       // this is our last writ
       // emit "finish" fn
-      if(i === 999999){
+      if(i === maxLength-1){
         return stream.end(buff)
       }
 
@@ -121,6 +122,10 @@ const fs = require("node:fs/promises");
   stream.on("finish", ()=>{
     console.timeEnd("writeMany");
     fileHandle.close()
+  })
+
+  stream.on("close",()=>{
+    console.log("Stream was closed.")
   })
 
 })();
